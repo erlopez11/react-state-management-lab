@@ -88,6 +88,13 @@ const App = () => {
     },
   ])
 
+
+  let totalStrength = 0;
+  let totalAgility = 0;
+  team.forEach(team => {
+    totalStrength += team.strength;
+    totalAgility += team.agility;
+  })
   
   const handleAddFighter = (fighter) => {
     if (money < fighter.price) {
@@ -95,30 +102,43 @@ const App = () => {
     } else {
       const newTeamArray = [...team, fighter];
       setTeam(newTeamArray);
-      
-      const id = fighter.id
+   
+      const id = fighter.id;
       const newFighterArray = zombieFighters.filter((fighter) => fighter.id !== id);
       setZommbieFighters(newFighterArray);
   
       setMoney(money - fighter.price);
+ 
     }
   }
+  
+  const handleRemoveFighter = (fighter) => {
+    const id = fighter.id;
+    const newTeamArray = team.filter((fighter) => fighter.id !== id);
+    setTeam(newTeamArray);
 
+    const newFighterArray = [...zombieFighters, fighter];
+    setZommbieFighters(newFighterArray);
 
+    setMoney(money + fighter.price);
+  }
 
   return (
     <>
-      <h2><span>Money: </span>{money}</h2>
+      <h2>Money: {money}</h2>
+      <h2>Team Strength: {totalStrength}</h2>
+      <h2>Team Agility: {totalAgility}</h2>
       <h2>{team.length === 0 ? 'Quick! Pick Some Team Members!' : 'My Team:'}</h2>
 
       <ul>
         {team.map(member => (
-          <li>
+          <li key={member.id}>
             <img src={member.img} />
             <h2>{member.name}</h2>
             <p><span>Price: </span>{member.price}</p>
             <p><span>Strength: </span>{member.strength}</p>
             <p><span>Agility: </span>{member.agility}</p>
+            <button onClick={() => handleRemoveFighter(member)}>Remove Fighter</button>
           </li>
         ))}
       </ul>
