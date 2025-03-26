@@ -5,6 +5,7 @@ const App = () => {
 
   const [team, setTeam] = useState([]);
   const [money, setMoney] = useState(100);
+  const [isNotEnoughMoney, setIsNotEnoughMoney] = useState(false);
   const [zombieFighters, setZommbieFighters] = useState([
     {
       id: 1,
@@ -98,7 +99,7 @@ const App = () => {
   
   const handleAddFighter = (fighter) => {
     if (money < fighter.price) {
-      console.log('Not Enough Money');
+      setIsNotEnoughMoney(true);
     } else {
       const newTeamArray = [...team, fighter];
       setTeam(newTeamArray);
@@ -108,9 +109,11 @@ const App = () => {
       setZommbieFighters(newFighterArray);
   
       setMoney(money - fighter.price);
+      setIsNotEnoughMoney(false);
  
     }
   }
+
   
   const handleRemoveFighter = (fighter) => {
     const id = fighter.id;
@@ -126,6 +129,7 @@ const App = () => {
   return (
     <>
       <h2>Money: {money}</h2>
+      <p>{isNotEnoughMoney ? 'Not enough money!' : ''}</p>
       <h2>Team Strength: {totalStrength}</h2>
       <h2>Team Agility: {totalAgility}</h2>
       <h2>{team.length === 0 ? 'Quick! Pick Some Team Members!' : 'My Team:'}</h2>
